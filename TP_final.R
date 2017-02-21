@@ -77,12 +77,26 @@ library(car)
 result = vif(lm(set$price~km+I(km^2)+I(km^3),data = set))
 #comment: -------
 #g)
-
+lr2 = lm(set$kop2~km+I(km^2),data = set)
+summary(lr2)
+#Coefficients:
+#  Estimate Std. Error    t value Pr(>|t|)    
+#(Intercept)  6.288e+00  1.114e-08  564703221   <2e-16 ***
+#  km          -1.022e-01  1.653e-10 -618221041   <2e-16 ***
+#  I(km^2)      3.714e-04  5.868e-13  632936828   <2e-16 ***
+lr3 = lm(set$kop3~km+I(km^2)+I(km^3),data = set)
+summary(lr3)
+#Coefficients:
+#  Estimate Std. Error    t value Pr(>|t|)    
+#(Intercept) -9.461e+00  1.788e-08 -529189693   <2e-16 ***
+#  km           2.687e-01  4.370e-10  614916710   <2e-16 ***
+#  I(km^2)     -2.203e-03  3.386e-12 -650691516   <2e-16 ***
+#  I(km^3)      5.406e-06  8.192e-15  659873143   <2e-16 ***
 #Q5 methode1
 #1)
-lmf = step(lm(set$price~.,data = set))
+library(MASS)
+lmf = stepAIC(lm(set$price~.,data = set))
 #set$price ~ age + km + kop2 + ageop2
-
 #Df Sum of Sq     RSS     AIC
 #<none>                 91.391 -98.764
 #- kop2    1     3.301  94.692 -94.661
@@ -97,3 +111,4 @@ qqline(rstudent(lmf))
 max(rstudent(lmf))       # 4.364175
 which.max(rstudent(lmf)) # plus grand residu  35
 plot(lmf)
+
