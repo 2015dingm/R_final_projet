@@ -27,20 +27,39 @@ summary(model1)
 # interpretation: -----------
 #Q4 Étude du prix en fonction du kilométrage:
 #a)
-model2 = lm(set$price~set$km,data = set)
+model2 = lm(price~km,data = set)
 summary(model2) 
 # interpretation: -----------
 # it seems the longer the kM is, the smaller the price is 
 #b)我不太确定怎么做，把50 000km的数据挑出来，然后用bootstrap?是不是我想麻烦了？
-
-
-
+confint(model2, "set$km")
+IC1=predict(model2, newdata = data.frame(km = 50), interval = "confidence")
+max(IC1)-min(IC1)#0.6604941
+IC2=predict(model2, newdata = data.frame(km=135), interval = "confidence")
+max(IC2)-min(IC2)#0.3075579
+dev.off()
 #c) this is almost a linear function: kop1 = 0.02243*km - 3.02203
-lm(set$kop1~set$km,data = set)
-summary(lm(set$kop1~set$km,data = set))
+plot(set$km,set$kop1,main = "linear")
+lm= lm(set$kop1~set$km,data = set)
 #Coefficients:
 #  (Intercept)       set$km  
 #-3.02203      0.02243  
+summary(lm(set$kop1~set$km,data = set))
+qqnorm(rstudent(lm),
+       main=c("pval=", round(shapiro.test(rstudent(lmf))$p.value,2)))
+qqline(rstudent(lm))
+max(rstudent(lm))
+which.max(rstudent(lm)) # plus grand r?sidu
+plot(lm)
+
+#reduis = set$kop1-(lm$coefficients[1]+lm$coefficients[2]*set$km)
+#m = mean(reduis)
+#sd = sd(reduis)
+#k=(reduis-m)/sd
+#qq-plot:observe a good fit of the straight line
+#qqnorm(k)
+#qqline(k)
+
 #d)
 km = set$km
 model3 = lm(set$price~km+I(km^2)+I(km^3),data = set)
