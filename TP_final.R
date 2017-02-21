@@ -59,3 +59,6 @@ res = vif(lm(set$price~km+I(km^2)+I(km^3),data = set))
 #comment: -------
 #g)
 
+
+
+
