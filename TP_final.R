@@ -46,7 +46,7 @@ lm= lm(set$kop1~set$km,data = set)
 #-3.02203      0.02243  
 summary(lm(set$kop1~set$km,data = set))
 qqnorm(rstudent(lm),
-       main=c("pval=", round(shapiro.test(rstudent(lmf))$p.value,2)))
+       main=c("pval=", round(shapiro.test(rstudent(lm))$p.value,2)))
 qqline(rstudent(lm))
 max(rstudent(lm))
 which.max(rstudent(lm)) # plus grand r?sidu
@@ -74,10 +74,26 @@ anova(model3)
 anova(model3,model3_1)
 #f) you need to install this package, because it's not contained initially by R
 library(car)
-res = vif(lm(set$price~km+I(km^2)+I(km^3),data = set))
+result = vif(lm(set$price~km+I(km^2)+I(km^3),data = set))
 #comment: -------
 #g)
 
+#Q5 methode1
+#1)
+lmf = step(lm(set$price~.,data = set))
+#set$price ~ age + km + kop2 + ageop2
 
-
-
+#Df Sum of Sq     RSS     AIC
+#<none>                 91.391 -98.764
+#- kop2    1     3.301  94.692 -94.661
+#- ageop2  1     5.858  97.248 -90.079
+#- km      1    28.140 119.531 -54.594
+#- age     1    71.985 163.376  -0.848
+#2)
+summary(lmf)
+qqnorm(rstudent(lmf),
+       main=c("pval=", round(shapiro.test(rstudent(lmf))$p.value,2)))
+qqline(rstudent(lmf))
+max(rstudent(lmf))       # 4.364175
+which.max(rstudent(lmf)) # plus grand residu  35
+plot(lmf)
