@@ -77,6 +77,16 @@ anova(model3,model3_1)
 library(car)
 result = vif(lm(set$price~km+I(km^2)+I(km^3),data = set))
 #comment: -------
+#calcul direct:1/(1-Rj^2) 
+mkm=lm(km~I(km^2)+I(km^3), data = set)
+(vif_km=1/(1-summary(mkm)$r.squared^2))
+#82.90889
+mkm2=lm(I(km^2)~I(km^3)+km, data = set)
+(vif_km2=1/(1-(summary(mkm2)$r.squared)^2))
+#393.9252
+mkm3=lm(I(km^3)~I(km^2)+km, data = set)
+(vif_km3=1/(1-(summary(mkm3)$r.squared)^2))
+#131.5113
 #g)
 lr2 = lm(set$kop2~km+I(km^2),data = set)
 summary(lr2)
